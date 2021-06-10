@@ -1,0 +1,37 @@
+{
+  "name": "nbaStreetJam",
+  "version": "1.0.0",
+  "description": "Application to simulate hypothetical individual or team basketball games",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server/index.js",
+    "dev": "concurrently \"webpack --mode development\" \"node server/index.js\"",
+    "build": "webpack --mode production",
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realNitinKumar/nbaStreetJam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/realNitinKumar/nbaStreetJam/issues"
+  },
+  "homepage": "https://github.com/realNitinKumar/nbaStreetJam#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "html-webpack-plugin": "^5.3.1",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2"
+  }
+}
