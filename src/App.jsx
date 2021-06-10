@@ -12,7 +12,7 @@ class App extends React.Component {
         weight: undefined,
         team: undefined,
         position: undefined,
-        image: undefined,
+        image: 'https://bestanimations.com/media/basketball/507997070basketball-player-dribbling-ball-clip-art-animated-gif-4.gif',
         id: undefined,
       },
       p1Stats: {
@@ -33,7 +33,7 @@ class App extends React.Component {
         weight: undefined,
         team: undefined,
         position: undefined,
-        image: undefined,
+        image: 'https://bestanimations.com/media/basketball/507997070basketball-player-dribbling-ball-clip-art-animated-gif-4.gif',
         id: undefined,
       },
       p2Stats: {
@@ -92,14 +92,14 @@ class App extends React.Component {
 
       // asyncFoo();
 
-      await new Promise(() => setTimeout(() => console.log("stalling"), 1500))
+      await new Promise(() => setTimeout(() => console.log("stalling"), 3000))
         .then(
           setTimeout(() => {
             this.setState({
               pbpDisplay: pbpDisplayCopy,
               index: indexIncrement
             })
-          }, 1500)
+          }, 3000)
         )
 
       // this.setState({
@@ -404,8 +404,11 @@ class PlayByPlay extends Component {
   render() {
     const { player1, player2, p1Stats, p2Stats, setPlayByPlay, pbpDisplay, gamePlayed } = this.props
     
-    let p1Score = 0;
-    let p2Score = 0;
+    // let p1Score = 0;
+    // let p2Score = 0;
+
+    let p1 = {Score : 0};
+    let p2 = {Score : 0};
 
     const resultArr = [];
 
@@ -413,20 +416,74 @@ class PlayByPlay extends Component {
     // console.log("p1Stats",p1Stats)
     // console.log("p2Stats",p2Stats)
 
+    // const twoMade1 = [
+    //   `${player1.name} scores the layup! --- ${player2.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player1.name} crosses over ${player2.name} and swishes the midrange jumpshot! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player1.name} banks in the layup off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player1.name} takes FLIGHT and JAMS it over  ${player2.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    // ]
+
+    // const twoMade2 = [
+    //   `${player2.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player2.name} crosses over ${player1.name} and swishes the midrange jumpshot! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player2.name} banks in the layup off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player2.name} takes FLIGHT and JAMS it over  ${player1.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    // ]
+
+    // const twoMiss2 = [
+    //   `${player2.name} misses the layup!`,
+    //   `${player2.name} can't get the jumpshot to fall over ${player1.name}!`,
+    //   `${player2.name} is REJECTED at the rim by ${player1.name}!`,
+    //   `${player2.name}'s shot bounces off the rim!`,
+    // ]
+
+    // const twoMiss1 = [
+    //   `${player1.name} misses the layup!`,
+    //   `${player1.name} can't get the jumpshot to fall over ${player2.name}!`,
+    //   `${player1.name} is REJECTED at the rim by ${player2.name}!`,
+    //   `${player1.name}'s shot bounces off the rim!`,
+    // ]
+
+    // const threeMade2 = [
+    //   `${player2.name} swishes it in from WAAAAY DOWNTOWN! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player2.name} banks the the 3 off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player2.name} shoots it in from beyond the arc! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player2.name} heaves the ball over ${player1.name} from behind the arc and into the basket! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+    // ]
+
+    // const threeMade1 = [
+    //   `${player1.name} swishes it in from WAAAAY DOWNTOWN! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player1.name} banks the the 3 off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player1.name} shoots it in from beyond the arc! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+    //   `${player1.name} heaves the ball over ${player2.name} from behind the arc and into the basket! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+    // ]
+
+    // const threeMiss2 = [
+    //   `${player2.name} pulls up from half court and doesn't even hit the backboard!`,
+    //   `${player2.name} can't get the deep 3 to fall!`,
+    //   `${player2.name} shoots a contested shot over ${player1.name} but can't get it to fall!`,
+    //   `${player2.name}'s shot from behind the arc bounces off the rim!`,
+    // ]
+
+    // const threeMiss1 = [
+    //   `${player1.name} pulls up from half court and doesn't even hit the backboard!`,
+    //   `${player1.name} can't get the deep 3 to fall!`,
+    //   `${player1.name} shoots a contested shot over ${player2.name} but can't get it to fall!`,
+    //   `${player1.name}'s shot from behind the arc bounces off the rim!`,
+    // ]
+
     const twoMade1 = [
-      `${player1.name} scores the layup! --- ${player2.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player1.name} crosses over ${player2.name} and swishes the midrange jumpshot! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player1.name} banks in the layup off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player1.name} takes FLIGHT and JAMS it over  ${player2.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player1.name} scores the hesi stepback jumpshot over ${player2.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+      `${player1.name} scores the layup! `,
+      `${player1.name} crosses over ${player2.name} and swishes the midrange jumpshot! `,
+      `${player1.name} banks in the layup off the glass! `,
+      `${player1.name} takes FLIGHT and JAMS it over  ${player2.name}! `,
     ]
 
     const twoMade2 = [
-      `${player2.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player2.name} crosses over ${player1.name} and swishes the midrange jumpshot! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player2.name} banks in the layup off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player2.name} takes FLIGHT and JAMS it over  ${player1.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player2.name} scores the hesi stepback jumpshot over ${player1.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+      `${player2.name} scores the layup! `,
+      `${player2.name} crosses over ${player1.name} and swishes the midrange jumpshot! `,
+      `${player2.name} banks in the layup off the glass! `,
+      `${player2.name} takes FLIGHT and JAMS it over  ${player1.name}! `,
     ]
 
     const twoMiss2 = [
@@ -444,17 +501,17 @@ class PlayByPlay extends Component {
     ]
 
     const threeMade2 = [
-      `${player2.name} swishes it in from WAAAAY DOWNTOWN! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player2.name} banks the the 3 off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player2.name} shoots it in from beyond the arc! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player2.name} heaves the ball over ${player1.name} from behind the arc and into the basket! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+      `${player2.name} swishes it in from WAAAAY DOWNTOWN! `,
+      `${player2.name} banks the the 3 off the glass! `,
+      `${player2.name} shoots it in from beyond the arc! `,
+      `${player2.name} heaves the ball over ${player1.name} from behind the arc and into the basket! `
     ]
 
     const threeMade1 = [
-      `${player1.name} swishes it in from WAAAAY DOWNTOWN! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player1.name} banks the the 3 off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player1.name} shoots it in from beyond the arc! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
-      `${player1.name} heaves the ball over ${player2.name} from behind the arc and into the basket! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+      `${player1.name} swishes it in from WAAAAY DOWNTOWN! `,
+      `${player1.name} banks the the 3 off the glass! `,
+      `${player1.name} shoots it in from beyond the arc! `,
+      `${player1.name} heaves the ball over ${player2.name} from behind the arc and into the basket! `
     ]
 
     const threeMiss2 = [
@@ -481,49 +538,125 @@ class PlayByPlay extends Component {
       let p12pt = p1NakedMult * p1Stats.fg_pct;
       let p22pt = p2NakedMult * p2Stats.fg_pct;
       
-      while(p1Score < 21 && p2Score < 21){
-        if(Math.random() > 0.5){
+      // while(p1Score < 21 && p2Score < 21){
+      //   if(Math.random() > 0.5){
+      //     // Decide whether shooting a 2 or 3
+      //     if(Math.random() > .30){
+      //         if(p12pt > Math.random() * 20) {
+      //           p1Score += 2;
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+      //         }else {
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+      //         }
+      //     } else {
+      //       if(p13pt > Math.random() * 15) {
+      //         p1Score += 3;
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+      //       }else {
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+      //       }
+      //     }
+      //   }else {
+      //     if(Math.random() > .30){
+      //       if(p22pt > Math.random() * 20) {
+      //         p2Score += 2;
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+      //       }else {
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+      //       }
+      //   } else {
+      //       if(p23pt > Math.random() * 15) {
+      //         p2Score += 3;
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+      //       }else {
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+      //       }
+      //   }
+      //   }
+      // }
+
+      // while(p1Score < 21 && p2Score < 21){
+      //   if(Math.random() > 0.5){
+      //     // Decide whether shooting a 2 or 3
+      //     if(Math.random() > .30){
+      //         if(p12pt > Math.random() * 20) {
+      //           p1Score += 2;
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade1[Math.floor(Math.random() * 4)]}</li>);
+      //         }else {
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss1[Math.floor(Math.random() * 4)]}</li>)
+      //         }
+      //     } else {
+      //       if(p13pt > Math.random() * 15) {
+      //         p1Score += 3;
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade1[Math.floor(Math.random() * 4)]}</li>);
+      //       }else {
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss1[Math.floor(Math.random() * 4)]}</li>)
+      //       }
+      //     }
+      //   }else {
+      //     if(Math.random() > .30){
+      //       if(p22pt > Math.random() * 20) {
+      //         p2Score += 2;
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade2[Math.floor(Math.random() * 4)]}</li>);
+      //       }else {
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss2[Math.floor(Math.random() * 4)]}</li>)
+      //       }
+      //   } else {
+      //       if(p23pt > Math.random() * 15) {
+      //         p2Score += 3;
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade2[Math.floor(Math.random() * 4)]}</li>);
+      //       }else {
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss2[Math.floor(Math.random() * 4)]}</li>)
+      //       }
+      //   }
+      //   }
+      // }
+
+      while(p1.Score < 21 && p2.Score < 21){
+        // if(Math.random() > 0.5){
           // Decide whether shooting a 2 or 3
           if(Math.random() > .30){
               if(p12pt > Math.random() * 20) {
-                p1Score += 2;
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+                p1.Score += 2;
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
               }else {
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
               }
           } else {
             if(p13pt > Math.random() * 15) {
-              p1Score += 3;
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+              p1.Score += 3;
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
             }else {
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
             }
           }
-        }else {
-          if(Math.random() > .30){
-            if(p22pt > Math.random() * 20) {
-              p2Score += 2;
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
-            }else {
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
-            }
-        } else {
-            if(p23pt > Math.random() * 15) {
-              p2Score += 3;
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
-            }else {
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
-            }
+        // }else {
+          if(p1.Score < 21){
+            if(Math.random() > .30){
+              if(p22pt > Math.random() * 20) {
+                p2.Score += 2;
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+              }else {
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss2[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+              }
+          } else {
+              if(p23pt > Math.random() * 15) {
+                p2.Score += 3;
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+              }else {
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+              }
+          }
         }
-        }
+        // }
       }
 
-      let winner = p1Score > p2Score ? player1.name : player2.name;
+      let winner = p1.Score > p2.Score ? player1.name : player2.name;
       let winnerImage = player1.name == winner ? player1.image : player2.image;
 
-      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`AND THE WINNER IS....: ${winner}!`}</li>);
+      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}><h3>{`AND THE WINNER IS....: ${winner}!`}</h3></li>);
       resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}><img src = {`${winnerImage}`}></img></li>)
-      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`FINAL SCORE:  ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}><h3>{`FINAL SCORE:  ${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h3></li>);
     }
 
     // console.log(resultArr.length);
