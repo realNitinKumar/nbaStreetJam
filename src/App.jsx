@@ -1,5 +1,6 @@
 import { hot } from 'react-hot-loader/root'
 import React, { Component } from "react";
+const regeneratorRuntime = require("regenerator-runtime");
 
 class App extends React.Component {
   constructor() {
@@ -22,7 +23,7 @@ class App extends React.Component {
         stl: undefined,
         turnover: undefined,
         pts: undefined,
-        fg_pct: undefined,
+        fg_pct: 0,
         fg3_pct: undefined,
         ft_pct: undefined,
       },
@@ -43,17 +44,78 @@ class App extends React.Component {
         stl: undefined,
         turnover: undefined,
         pts: undefined,
-        fg_pct: undefined,
+        fg_pct: 0,
         fg3_pct: undefined,
         ft_pct: undefined,
       },
       p1Score: 0,
       p2Score: 0,
+      pbp: [],
+      pbpDisplay: [],
+      index: 0,
+      gamePlayed: false,
       didWin: false,
     }
     this.onClick1 = this.onClick1.bind(this);
     this.onClick2 = this.onClick2.bind(this);
+    this.setPlayByPlay = this.setPlayByPlay.bind(this);
   }
+
+  setPlayByPlay(pbpArr) {
+    // console.log("pbpArr in setPlayByPlay", pbpArr)
+    this.setState({
+      pbp: pbpArr,
+      gamePlayed: true
+    })
+  }
+
+  async componentDidUpdate() {
+    // console.log("inside componentDidUpdate")
+    // console.log("pbp length",this.state.pbp.length);
+    if(this.state.pbp.length > 0 && this.state.index < this.state.pbp.length){
+      // console.log("inside the if statement of componentDidUpdate")
+      let pbpDisplayCopy = [...this.state.pbpDisplay]
+      pbpDisplayCopy.push(this.state.pbp[this.state.index])
+      console.log("logging the elements of the pbp",this.state.pbp[this.state.index])
+      let indexIncrement = this.state.index;
+      indexIncrement += 1;
+
+      // const sleep = (ms) => {
+      //   return new Promise(resolve => setTimeout(resolve, ms));
+      // }
+      // const asyncFoo = async () => {
+      //     await sleep(2000);
+      //     console.log('look at this');
+      //     await sleep(1000);
+      //     console.log('getting fancy now');
+      // }
+
+      // asyncFoo();
+
+      await new Promise(() => setTimeout(() => console.log("stalling"), 1500))
+        .then(
+          setTimeout(() => {
+            this.setState({
+              pbpDisplay: pbpDisplayCopy,
+              index: indexIncrement
+            })
+          }, 1500)
+        )
+
+      // this.setState({
+      //   pbpDisplay: pbpDisplayCopy,
+      //   index: indexIncrement
+      // })
+      // setInterval(() => console.log("I am stalling"), 1000)
+      //   .then(() => {
+      //     this.setState({
+      //       pbpDisplay: pbpDisplayCopy,
+      //       index: indexIncrement
+      //     })
+      //   })
+    }
+  }
+
   onClick1(name) {
     // console.log("Clicked");
     // console.log(name);
@@ -75,9 +137,9 @@ class App extends React.Component {
         player1: player1Temp
       })
     })
-    .then(() => {
-      console.log("state player1", this.state.player1);
-    })
+    // .then(() => {
+    //   console.log("state player1", this.state.player1);
+    // })
     .then(() => {
       fetch(`https://www.balldontlie.io/api/v1/players?search=${this.state.player1.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`)
       .then(res => res.json())
@@ -89,9 +151,9 @@ class App extends React.Component {
           player1: player1Copy
         })
       })
-      .then(() => {
-        console.log("added id", this.state.player1)
-      })
+      // .then(() => {
+      //   console.log("added id", this.state.player1)
+      // })
       .then(() => {
         fetch(`https://www.balldontlie.io/api/v1/season_averages?player_ids[]=${this.state.player1.id}`)
           .then(res => res.json())
@@ -113,9 +175,9 @@ class App extends React.Component {
               p1Stats: p1StatsGenerate
             })
           })
-          .then(() => {
-            console.log('player 1 stats',this.state.p1Stats)
-          })
+          // .then(() => {
+          //   console.log('player 1 stats',this.state.p1Stats)
+          // })
       })
     })
     // fetch(`https://www.balldontlie.io/api/v1/players?search=${this.state.player1.name}`)
@@ -146,9 +208,9 @@ class App extends React.Component {
         player2: player2Temp
       })
     })
-    .then(() => {
-      console.log("state player2", this.state.player2);
-    })
+    // .then(() => {
+    //   console.log("state player2", this.state.player2);
+    // })
     .then(() => {
       fetch(`https://www.balldontlie.io/api/v1/players?search=${this.state.player2.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`)
       .then(res => res.json())
@@ -160,9 +222,9 @@ class App extends React.Component {
           player2: player2Copy
         })
       })
-      .then(() => {
-        console.log("added id2", this.state.player2)
-      })
+      // .then(() => {
+      //   console.log("added id2", this.state.player2)
+      // })
       .then(() => {
         fetch(`https://www.balldontlie.io/api/v1/season_averages?player_ids[]=${this.state.player2.id}`)
           .then(res => res.json())
@@ -184,9 +246,9 @@ class App extends React.Component {
               p2Stats: p2StatsGenerate
             })
           })
-          .then(() => {
-            console.log('player 2 stats',this.state.p2Stats)
-          })
+          // .then(() => {
+          //   console.log('player 2 stats',this.state.p2Stats)
+          // })
       })
     })
   }
@@ -212,7 +274,8 @@ class App extends React.Component {
           </div>
         </div>
         <div>
-          <PlayByPlay p1Score={this.state.p1Score} p2Score={this.state.p2Score} player1={this.state.player1} player2={this.state.player2} p1Stats={this.state.p1Stats} p2Stats={this.state.p2Stats}/>
+        <h3>Play by Play</h3>
+          <PlayByPlay gamePlayed={this.state.gamePlayed} pbpDisplay={this.state.pbpDisplay} setPlayByPlay={this.setPlayByPlay} player1={this.state.player1} player2={this.state.player2} p1Stats={this.state.p1Stats} p2Stats={this.state.p2Stats}/>
         </div>
       </div>
     )
@@ -272,8 +335,8 @@ class PlayerData extends Component {
     //   playerDataArr.push(<li>{el}</li>)
     // })
     const { player1, player2 } = this.props;
-    console.log("player1", player1);
-    console.log("player2", player2);
+    // console.log("player1", player1);
+    // console.log("player2", player2);
     const player1InfoArr = [];
     const player2InfoArr = [];
 
@@ -287,17 +350,21 @@ class PlayerData extends Component {
     //   id: undefined,
     // },
 
-    player1InfoArr.push(<li>{`Name: ${player1.name}`}</li>);
-    player1InfoArr.push(<li>{`Team: ${player1.team}`}</li>);
-    player1InfoArr.push(<li>{`Position: ${player1.position}`}</li>);
-    player1InfoArr.push(<li>{`Height: ${player1.height}`}</li>);
-    player1InfoArr.push(<li>{`Weight: ${player1.weight}`}</li>);
+    // player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`PLAYER A:`}</li>);
+    player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{<img src = {`${player1.image}`}></img>}</li>);
+    player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Name: ${player1.name}`}</li>);
+    player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Team: ${player1.team}`}</li>);
+    player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Position: ${player1.position}`}</li>);
+    player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Height: ${player1.height}`}</li>);
+    player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Weight: ${player1.weight}`}</li>);
 
-    player2InfoArr.push(<li>{`Name: ${player2.name}`}</li>);
-    player2InfoArr.push(<li>{`Team: ${player2.team}`}</li>);
-    player2InfoArr.push(<li>{`Position: ${player2.position}`}</li>);
-    player2InfoArr.push(<li>{`Height: ${player2.height}`}</li>);
-    player2InfoArr.push(<li>{`Weight: ${player2.weight}`}</li>);
+    // player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`PLAYER B:`}</li>);
+    player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{<img src = {`${player2.image}`}></img>}</li>);
+    player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Name: ${player2.name}`}</li>);
+    player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Team: ${player2.team}`}</li>);
+    player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Position: ${player2.position}`}</li>);
+    player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Height: ${player2.height}`}</li>);
+    player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Weight: ${player2.weight}`}</li>);
 
     // if(this.props.p1Name){
     //   player1InfoArr.push(`Name: ${this.props.p1Name}`);
@@ -332,28 +399,80 @@ class PlayerData extends Component {
   }
 }
 
-// fga: undefined,
-// fg3a: undefined,
-// fta: undefined,
-// blk: undefined,
-// stl: undefined,
-// turnover: undefined,
-// pts: undefined,
-// fg_pct: undefined,
-// fg3_pct: undefined,
-// ft_pct: undefined,
-
 
 class PlayByPlay extends Component {
   render() {
-    const { player1, player2, p1Stats, p2Stats } = this.props
+    const { player1, player2, p1Stats, p2Stats, setPlayByPlay, pbpDisplay, gamePlayed } = this.props
     
     let p1Score = 0;
     let p2Score = 0;
 
     const resultArr = [];
 
-    if(p1Stats.fg_pct > 0 && p2Stats.fg_pct > 0){
+    // console.log("gamePlayed", gamePlayed)
+    // console.log("p1Stats",p1Stats)
+    // console.log("p2Stats",p2Stats)
+
+    const twoMade1 = [
+      `${player1.name} scores the layup! --- ${player2.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player1.name} crosses over ${player2.name} and swishes the midrange jumpshot! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player1.name} banks in the layup off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player1.name} takes FLIGHT and JAMS it over  ${player2.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player1.name} scores the hesi stepback jumpshot over ${player2.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+    ]
+
+    const twoMade2 = [
+      `${player2.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player2.name} crosses over ${player1.name} and swishes the midrange jumpshot! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player2.name} banks in the layup off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player2.name} takes FLIGHT and JAMS it over  ${player1.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player2.name} scores the hesi stepback jumpshot over ${player1.name}! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+    ]
+
+    const twoMiss2 = [
+      `${player2.name} misses the layup!`,
+      `${player2.name} can't get the jumpshot to fall over ${player1.name}!`,
+      `${player2.name} is REJECTED at the rim by ${player1.name}!`,
+      `${player2.name}'s shot bounces off the rim!`,
+    ]
+
+    const twoMiss1 = [
+      `${player1.name} misses the layup!`,
+      `${player1.name} can't get the jumpshot to fall over ${player2.name}!`,
+      `${player1.name} is REJECTED at the rim by ${player2.name}!`,
+      `${player1.name}'s shot bounces off the rim!`,
+    ]
+
+    const threeMade2 = [
+      `${player2.name} swishes it in from WAAAAY DOWNTOWN! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player2.name} banks the the 3 off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player2.name} shoots it in from beyond the arc! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player2.name} heaves the ball over ${player1.name} from behind the arc and into the basket! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+    ]
+
+    const threeMade1 = [
+      `${player1.name} swishes it in from WAAAAY DOWNTOWN! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player1.name} banks the the 3 off the glass! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player1.name} shoots it in from beyond the arc! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`,
+      `${player1.name} heaves the ball over ${player2.name} from behind the arc and into the basket! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`
+    ]
+
+    const threeMiss2 = [
+      `${player2.name} pulls up from half court and doesn't even hit the backboard!`,
+      `${player2.name} can't get the deep 3 to fall!`,
+      `${player2.name} shoots a contested shot over ${player1.name} but can't get it to fall!`,
+      `${player2.name}'s shot from behind the arc bounces off the rim!`,
+    ]
+
+    const threeMiss1 = [
+      `${player1.name} pulls up from half court and doesn't even hit the backboard!`,
+      `${player1.name} can't get the deep 3 to fall!`,
+      `${player1.name} shoots a contested shot over ${player2.name} but can't get it to fall!`,
+      `${player1.name}'s shot from behind the arc bounces off the rim!`,
+    ]
+
+
+    if(p1Stats.fg_pct > 0 && p2Stats.fg_pct > 0 && gamePlayed === false){
 
       let p1NakedMult = (p1Stats.blk * 2) + (p1Stats.stl * 2) + p1Stats.pts - p1Stats.turnover;
       let p2NakedMult = (p2Stats.blk * 2) + (p2Stats.stl * 2) + p2Stats.pts - p2Stats.turnover;
@@ -368,41 +487,56 @@ class PlayByPlay extends Component {
           if(Math.random() > .30){
               if(p12pt > Math.random() * 20) {
                 p1Score += 2;
-                resultArr.push(<li>{`${player1.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
               }else {
-                resultArr.push(<li>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
               }
           } else {
             if(p13pt > Math.random() * 15) {
               p1Score += 3;
-              resultArr.push(<li>{`${player1.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
             }else {
-              resultArr.push(<li>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player1.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
             }
           }
         }else {
           if(Math.random() > .30){
             if(p22pt > Math.random() * 20) {
               p2Score += 2;
-              resultArr.push(<li>{`${player2.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} scores the layup! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
             }else {
-              resultArr.push(<li>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
             }
         } else {
             if(p23pt > Math.random() * 15) {
               p2Score += 3;
-              resultArr.push(<li>{`${player2.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} swishes in in from WAY downtown! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
             }else {
-              resultArr.push(<li>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
+              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`${player2.name} fucks it up! --- ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>)
             }
         }
         }
       }
+
+      let winner = p1Score > p2Score ? player1.name : player2.name;
+      let winnerImage = player1.name == winner ? player1.image : player2.image;
+
+      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`AND THE WINNER IS....: ${winner}!`}</li>);
+      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}><img src = {`${winnerImage}`}></img></li>)
+      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`FINAL SCORE:  ${player1.name}: ${p1Score}pts     ${player2.name}: ${p2Score}pts`}</li>);
     }
+
+    // console.log(resultArr.length);
+
+    if(resultArr.length > 0 && gamePlayed === false) {
+      // console.log("inside the if statement of playByPlay")
+      setPlayByPlay(resultArr);
+    }
+
     return (
       <div>
         <ul>
-          {resultArr}
+          {pbpDisplay}
         </ul>
       </div>
     )
