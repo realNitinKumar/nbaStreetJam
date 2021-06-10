@@ -5,7 +5,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
   filename: "./index.html"
 });
 module.exports = {
-  entry: "./src/index.js",
+  entry: ["./src/index.js"],
   output: { // NEW
     path: path.join(__dirname, 'dist'),
     filename: "[name].js"
@@ -21,5 +21,14 @@ module.exports = {
         }
       }
     ]
+  },
+  resolve: {
+    extensions: [
+      '.js',
+      '.jsx'
+    ],
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    }
   }
 };

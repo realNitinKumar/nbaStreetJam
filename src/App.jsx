@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root'
 import React, { Component } from "react";
 
 class App extends React.Component {
@@ -142,4 +143,4 @@ class PlayByPlay extends Component {
   }
 }
 
-export default (App);
+export default hot(App);
