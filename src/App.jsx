@@ -7,11 +7,11 @@ class App extends React.Component {
     super();
     this.state = {
       player1: {
-        name: undefined,
-        height: undefined,
-        weight: undefined,
-        team: undefined,
-        position: undefined,
+        name: 'Will Sentance',
+        height: '7\'5\"',
+        weight: 'None of your business',
+        team: 'Codesmith',
+        position: 'CEO',
         image: 'https://bestanimations.com/media/basketball/507997070basketball-player-dribbling-ball-clip-art-animated-gif-4.gif',
         id: undefined,
       },
@@ -28,11 +28,11 @@ class App extends React.Component {
         ft_pct: undefined,
       },
       player2: {
-        name: undefined,
-        height: undefined,
-        weight: undefined,
-        team: undefined,
-        position: undefined,
+        name: 'Sam Kim',
+        height: '6\'9\"',
+        weight: 'First of all how dare you',
+        team: 'Good Vibes',
+        position: 'Standies Savant',
         image: 'https://bestanimations.com/media/basketball/507997070basketball-player-dribbling-ball-clip-art-animated-gif-4.gif',
         id: undefined,
       },
@@ -54,28 +54,44 @@ class App extends React.Component {
       pbpDisplay: [],
       index: 0,
       gamePlayed: false,
-      didWin: false,
+      calledSetPbp: false,
     }
     this.onClick1 = this.onClick1.bind(this);
     this.onClick2 = this.onClick2.bind(this);
     this.setPlayByPlay = this.setPlayByPlay.bind(this);
+    this.startClick = this.startClick.bind(this);
   }
 
   setPlayByPlay(pbpArr) {
     // console.log("pbpArr in setPlayByPlay", pbpArr)
     this.setState({
       pbp: pbpArr,
-      gamePlayed: true
+      // gamePlayed: true
+      calledSetPbp: true
     })
   }
+
+  startClick() {
+    this.setState({
+      gamePlayed: true,
+      calledSetPbp: false
+    })
+  }
+
 
   async componentDidUpdate() {
     // console.log("inside componentDidUpdate")
     // console.log("pbp length",this.state.pbp.length);
-    if(this.state.pbp.length > 0 && this.state.index < this.state.pbp.length){
+    if(this.state.pbp.length > 0 && this.state.index < this.state.pbp.length && this.state.gamePlayed === true){
       // console.log("inside the if statement of componentDidUpdate")
       let pbpDisplayCopy = [...this.state.pbpDisplay]
-      pbpDisplayCopy.push(this.state.pbp[this.state.index])
+
+      if(this.state.index < this.state.pbp.length - 2) {
+        pbpDisplayCopy[0] = (this.state.pbp[this.state.index])
+      } else{
+        pbpDisplayCopy.push(this.state.pbp[this.state.index])
+      }
+      // pbpDisplayCopy.push(this.state.pbp[this.state.index])
       console.log("logging the elements of the pbp",this.state.pbp[this.state.index])
       let indexIncrement = this.state.index;
       indexIncrement += 1;
@@ -254,8 +270,9 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div>
-        <h1>NBA StreetJAM</h1>
+      <div className="centerMe">
+        <h1>NBA One on One JAM</h1>
+        <h2>First to 21 Points Wins!</h2>
         <div>
           {/* <button
             type='button' 
@@ -268,14 +285,25 @@ class App extends React.Component {
           <PlayerContainer onClick1={this.onClick1} onClick2={this.onClick2}/>
         </div>
         <div>
-          <h3>Player Information</h3>
+          <h3 id="PlayerInformation">Player Information</h3>
           <div>
             <PlayerData  player1={this.state.player1} player2={this.state.player2}/>
           </div>
         </div>
         <div>
+        {/* <h2>First to 21 Points Wins</h2> */}
+        <div className='startButtonContainer'>
+        <button
+            type='button' 
+            onClick={
+              this.startClick
+            }
+            id='startButton'>
+              Let's DANCE
+        </button>
+        </div>
         <h3>Play by Play</h3>
-          <PlayByPlay gamePlayed={this.state.gamePlayed} pbpDisplay={this.state.pbpDisplay} setPlayByPlay={this.setPlayByPlay} player1={this.state.player1} player2={this.state.player2} p1Stats={this.state.p1Stats} p2Stats={this.state.p2Stats}/>
+          <PlayByPlay gamePlayed={this.state.gamePlayed} pbpDisplay={this.state.pbpDisplay} setPlayByPlay={this.setPlayByPlay} player1={this.state.player1} player2={this.state.player2} p1Stats={this.state.p1Stats} p2Stats={this.state.p2Stats} calledSetPbp={this.state.calledSetPbp}/>
         </div>
       </div>
     )
@@ -287,7 +315,7 @@ class PlayerContainer extends Component {
     return (
     <div>
       <span className="searchBar">
-        <label>Player A: </label>
+        {/* <label>Player A: </label> */}
         <input id='player1Input'></input>
         <button
           type='button' 
@@ -302,12 +330,12 @@ class PlayerContainer extends Component {
               this.props.onClick1(document.getElementById('player1Input').value)
             }
           }
-          id='player1Button'>
+          className='playerButton'>
             Search
         </button>
       </span>
       <span className="searchBar">
-        <label>Player B:: </label>
+        {/* <label>Player B: </label> */}
         <input id='player2Input'></input>
         <button
         type='button'  
@@ -318,7 +346,7 @@ class PlayerContainer extends Component {
             // props.newMarket();
             // props.setNewLocation(document.getElementById('locationInput').value);
           }}
-          id='player2Button'>
+          className='playerButton'>
           Search
         </button>
       </span>
@@ -351,7 +379,8 @@ class PlayerData extends Component {
     // },
 
     // player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`PLAYER A:`}</li>);
-    player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{<img src = {`${player1.image}`}></img>}</li>);
+    // player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{<img src = {`${player1.image}`}></img>}</li>);
+    player1InfoArr.push(<img src = {`${player1.image}`} key={Math.random().toString(36).substr(2, 9)}></img>);
     player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Name: ${player1.name}`}</li>);
     player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Team: ${player1.team}`}</li>);
     player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Position: ${player1.position}`}</li>);
@@ -359,7 +388,7 @@ class PlayerData extends Component {
     player1InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Weight: ${player1.weight}`}</li>);
 
     // player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`PLAYER B:`}</li>);
-    player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{<img src = {`${player2.image}`}></img>}</li>);
+    player2InfoArr.push(<img src = {`${player2.image}`} key={Math.random().toString(36).substr(2, 9)}></img>);
     player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Name: ${player2.name}`}</li>);
     player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Team: ${player2.team}`}</li>);
     player2InfoArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{`Position: ${player2.position}`}</li>);
@@ -381,14 +410,14 @@ class PlayerData extends Component {
     return (
       <div>
         <span>
-          <div>
+          <div className="playerInfo">
             <ul>
               {player1InfoArr}
             </ul>
           </div>
         </span>
         <span>
-        <div>
+        <div className="playerInfo">
             <ul>
               {player2InfoArr}
             </ul>
@@ -402,7 +431,7 @@ class PlayerData extends Component {
 
 class PlayByPlay extends Component {
   render() {
-    const { player1, player2, p1Stats, p2Stats, setPlayByPlay, pbpDisplay, gamePlayed } = this.props
+    const { player1, player2, p1Stats, p2Stats, setPlayByPlay, pbpDisplay, gamePlayed, calledSetPbp } = this.props
     
     // let p1Score = 0;
     // let p2Score = 0;
@@ -502,14 +531,14 @@ class PlayByPlay extends Component {
 
     const threeMade2 = [
       `${player2.name} swishes it in from WAAAAY DOWNTOWN! `,
-      `${player2.name} banks the the 3 off the glass! `,
+      `${player2.name} banks in the 3 off the glass! `,
       `${player2.name} shoots it in from beyond the arc! `,
       `${player2.name} heaves the ball over ${player1.name} from behind the arc and into the basket! `
     ]
 
     const threeMade1 = [
       `${player1.name} swishes it in from WAAAAY DOWNTOWN! `,
-      `${player1.name} banks the the 3 off the glass! `,
+      `${player1.name} banks in the 3 off the glass! `,
       `${player1.name} shoots it in from beyond the arc! `,
       `${player1.name} heaves the ball over ${player2.name} from behind the arc and into the basket! `
     ]
@@ -612,22 +641,61 @@ class PlayByPlay extends Component {
       //   }
       // }
 
+      // while(p1.Score < 21 && p2.Score < 21){
+      //   // if(Math.random() > 0.5){
+      //     // Decide whether shooting a 2 or 3
+      //     if(Math.random() > .30){
+      //         if(p12pt > Math.random() * 20) {
+      //           p1.Score += 2;
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+      //         }else {
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+      //         }
+      //     } else {
+      //       if(p13pt > Math.random() * 15) {
+      //         p1.Score += 3;
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+      //       }else {
+      //         resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+      //       }
+      //     }
+      //   // }else {
+      //     if(p1.Score < 21){
+      //       if(Math.random() > .30){
+      //         if(p22pt > Math.random() * 20) {
+      //           p2.Score += 2;
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+      //         }else {
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss2[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+      //         }
+      //     } else {
+      //         if(p23pt > Math.random() * 15) {
+      //           p2.Score += 3;
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+      //         }else {
+      //           resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+      //         }
+      //     }
+      //   }
+      //   // }
+      // }
+
       while(p1.Score < 21 && p2.Score < 21){
         // if(Math.random() > 0.5){
           // Decide whether shooting a 2 or 3
           if(Math.random() > .30){
               if(p12pt > Math.random() * 20) {
                 p1.Score += 2;
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+                resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{twoMade1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>);
               }else {
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+                resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{twoMiss1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>)
               }
           } else {
             if(p13pt > Math.random() * 15) {
               p1.Score += 3;
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+              resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{threeMade1[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>);
             }else {
-              resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+              resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{threeMiss1[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>)
             }
           }
         // }else {
@@ -635,16 +703,16 @@ class PlayByPlay extends Component {
             if(Math.random() > .30){
               if(p22pt > Math.random() * 20) {
                 p2.Score += 2;
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+                resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{twoMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>);
               }else {
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{twoMiss2[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+                resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{twoMiss2[Math.floor(Math.random() * 4)]} <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>)
               }
           } else {
               if(p23pt > Math.random() * 15) {
                 p2.Score += 3;
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>);
+                resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{threeMade2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>);
               }else {
-                resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}>{threeMiss2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></li>)
+                resultArr.push(<h5 key={Math.random().toString(36).substr(2, 9)}>{threeMiss2[Math.floor(Math.random() * 4)]}  <h4>{`${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h4></h5>)
               }
           }
         }
@@ -654,20 +722,20 @@ class PlayByPlay extends Component {
       let winner = p1.Score > p2.Score ? player1.name : player2.name;
       let winnerImage = player1.name == winner ? player1.image : player2.image;
 
-      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}><h3>{`AND THE WINNER IS....: ${winner}!`}</h3></li>);
-      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}><img src = {`${winnerImage}`}></img></li>)
-      resultArr.push(<li key={Math.random().toString(36).substr(2, 9)}><h3>{`FINAL SCORE:  ${player1.name}: ${p1.Score}pts     ${player2.name}: ${p2.Score}pts`}</h3></li>);
+      resultArr.push(<h3 className="winnerText" key={Math.random().toString(36).substr(2, 9)}>{`AND THE WINNER IS.... ${winner}!`}</h3>);
+      resultArr.push(<img src = {`${winnerImage}`} key={Math.random().toString(36).substr(2, 9)}></img>)
+      resultArr.push(<h3 className="winnerText2" key={Math.random().toString(36).substr(2, 9)}>{`FINAL SCORE: ${player1.name}: ${p1.Score}pts  ${player2.name}: ${p2.Score}pts`}</h3>);
     }
 
     // console.log(resultArr.length);
 
-    if(resultArr.length > 0 && gamePlayed === false) {
+    if(resultArr.length > 0 && gamePlayed === false && calledSetPbp === false) {
       // console.log("inside the if statement of playByPlay")
       setPlayByPlay(resultArr);
     }
 
     return (
-      <div>
+      <div className = "pbpText">
         <ul>
           {pbpDisplay}
         </ul>
